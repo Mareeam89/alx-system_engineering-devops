@@ -1,18 +1,25 @@
 <img src=./image.png width=50%>
 
 # BooktifuL requests failure report
-Last week, it was reported that the BooktifuL platform was returning 500 Error on all requests made on the platform routes, all the services were down.  90% of the users were affected. The root cause was the failure of our master server web-01.
+On March 15, 2025, from 10:35 AM to 12:10 PM West African Time (1 hour, 35 minutes), our website had issues where it was slow or not working for many users. About 60% of users could not load pages properly. The problem happened because our database was getting too many connections and couldn’t handle them all.
 
 ## Timeline
-The error was realized on Saturday 26th February 1200 hours (East Africa Time) when our Site Reliability Engineer, Mr Elie saw the master server lagging in speed. Our engineers on call disconnected the master server web-01 for further system analysis and channelled all requests to client server web-02. They soled problem by Sunday 27th Febraury 2200 hours (East Africa Time).
+At 10:35 AM, our monitoring system alerted us to slow website performance. By 10:40 AM, engineers suspected a high volume of visitors, noting the database was struggling with too many connections. 
+By 11:00 AM, the database team checked for long-running queries. After restarting the database at 11:15 AM, the issue remained unresolved. The infrastructure team then found that the connection pool was overloaded. 
+They adjusted the settings to limit connections and restarted the services. By 12:10 PM, the website was functioning normally again.
 
 ## Root cause and resolution
-The BooktifuL platform is served by 2 ubuntu cloud servers. The master server web-01 was connected to serve all requests, and it stopped functioning due to memory outage as a results of so many requests because during a previous test, the client server web-02 was disconnected temporarily for testing and was not connected to the load balancer afterwards. 
-
-
-The issue was fixed when the master server was temporarily disconnected for memory clean-up then connected back to the loadbalancer and round-robin algorithm was configured so that both the master and client servers can handle equal amount of requests.
+The issue arose from our system allowing too many simultaneous connections to the database, causing it to reach its limit and making the website slow or unresponsive.
+To resolve this, we:
+1. Limited the number of concurrent connections.
+2. Restarted services to clear stuck connections.
+3. Enhanced our management of database connections to avoid future overloads.
 
 ## Measures against such problem in future
-- Choose the best loadbalancing algorithm for your programs
-- Always keep an eye on your servers to ensure they are running properly
-- Have extra back-up servers to prevent your program fro completely going offline during an issue
+To prevent future issues, we will:
+- Ensure connections are properly closed.
+- Set up alerts for excessive connections.
+- Verify that the database can handle traffic.
+- Simulate heavy usage to test our configurations.
+- Provide clear instructions for managing database connections. 
+These actions will help keep the website running smoothly.
