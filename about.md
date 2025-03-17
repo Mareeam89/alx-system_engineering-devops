@@ -1,42 +1,25 @@
-# 0x19. Postmortem
-This project is a sweet one.
+# Humorous Post-mortem
+## Issue Summary 
+An intersting thing happened today on the website.
 
+On March 15, 2025, from 10:35 AM to 12:10 PM WAT (1 hour, 35 minutes), our website took an unexpected coffee break. About 60% of users were left staring at loading screens, questioning their life choices. The culprit? Our database was overwhelmed with connections, struggling to keep up like a phone line during a reality show vote.
 
-Any software system will eventually fail, and that failure can come stem from a wide range of possible factors: bugs, traffic spikes, security issues, hardware failures, natural disasters, human error… Failing is normal and failing is actually a great opportunity to learn and improve. Any great Software Engineer must learn from his/her mistakes to make sure that they won’t happen again. Failing is fine, but failing twice because of the same issue is not.
+## Timeline
+10:35 AM WAT - Our monitoring system screamed for help: "The website is slow!" Engineers rushed in, thinking, "Did we just go viral?!", but logs revealed the database was holding onto connections like a traffic jam during rush hour.
+11:00 AM WAT - The database team suspected a long query was causing trouble. They restarted the database—because turning it off and on again works, right? Nope. So, they called in the infrastructure squad to check the server health and found out our connection pool was accepting too many connections at once, overwhelming the database.
+12:10 PM WAT - They adjusted database settings to limit connections and restarted services. Thus the crisis was averted, and the website returned from its unplanned vacation.
 
+## Root Cause and Resolution 
+Our API was allowing way too many database connections, overloading the system. The database had a meltdown, and users suffered.
+To fix it, we:
+- Put the database on a connection diet by lowering the allowed connections.
+- Restarted services to shake off stuck connections.
+- Improved connection handling to prevent future traffic jams.
 
-A postmortem is a tool widely used in the tech industry. After any outage, the team(s) in charge of the system will write a summary that has 2 main goals:
-
-
-- To provide the rest of the company’s employees easy access to information detailing the cause of the outage. Often outages can have a huge impact on a company, so managers and executives have to understand what happened and how it will impact their work.
-- And to ensure that the root cause(s) of the outage has been discovered and that measures are taken to make sure it will be fixed.
-
-
-Using one of the web stack debugging project issue I have previously done or an outage I have personally faced, I am required to write a postmortem.
-
-## Requirements:
-
-- Issue Summary (that is often what executives will read) must contain:
-    - duration of the outage with start and end times (including timezone)
-    - what was the impact (what service was down/slow? What were user experiencing? How many % of the users were affected?)
-    - what was the root cause
-
-- Timeline (format bullet point, format: time - keep it short, 1 or 2 sentences) must contain:
-    - when was the issue detected
-    - how was the issue detected (monitoring alert, an   engineer noticed something, a customer complained…)
-    - actions taken (what parts of the system were investigated, what were the assumption on the root cause of the issue)
-    - misleading investigation/debugging paths that were taken
-    - which team/individuals was the incident escalated to
-    - how the incident was resolved
-
-- Root cause and resolution must contain:
-    - explain in detail what was causing the issue
-    - explain in detail how the issue was fixed
-
-- Corrective and preventative measures must contain:
-    - what are the things that can be improved/fixed (broadly speaking)
-    - a list of tasks to address the issue (be very specific, like a TODO, example: patch Nginx server, add monitoring on server memory…)
-- Be brief and straight to the point, between 400 to 600 words
-
-## Resources
-[Apiumhub](https://apiumhub.com/tech-blog-barcelona/software-development-project-postmortem/)
+## Corrective and Preventative Measures 
+To avoid another "database siesta," we will:
+- Better database management: Make sure connections don’t overstay their welcome.
+- Improved monitoring: Set up alerts before things get out of hand.
+- Traffic stress testing: Simulate high usage to make sure we’re prepared.
+- Clear documentation: So future engineers won’t repeat our mistakes.
+Next time, we’ll make sure our database keeps working—no coffee breaks allowed!
